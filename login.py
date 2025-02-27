@@ -34,7 +34,7 @@ def show_login_page():
     col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
 
     with col2:
-        st.image("images/solvyn.png", width=300)
+        st.image("images/solvyns.png", width=300)
     #st.markdown('<div class="center"><img src="solvyn.png" width="300"></div>', unsafe_allow_html=True)
     #st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
     #st.logo("/Users/maheshsasikanth/Downloads/solvyn.png", size = "large")
@@ -111,7 +111,7 @@ def show_landing_page():
     col1, col2, col3 = st.sidebar.columns([2, 2, 2]) # adjust the column ratio for your needs.
 
     with col2:
-        st.sidebar.image("images/solvyn.png", use_container_width=True)
+        st.sidebar.image("images/solvyns.png", use_container_width=True)
 
     #st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
     st.sidebar.markdown(
