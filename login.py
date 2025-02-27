@@ -29,11 +29,11 @@ def show_login_page():
         unsafe_allow_html=True,
     )
 
-    image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
+    #image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
 
-    col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
+    #col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
 
-    with col2:
+    #with col2:
        # st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=300)
     #st.markdown('<div class="center"><img src="solvyn.png" width="300"></div>', unsafe_allow_html=True)
     #st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
@@ -106,11 +106,11 @@ def show_create_account_page():
 
 def show_landing_page():
 
-    image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
+    #image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
 
-    col1, col2, col3 = st.sidebar.columns([2, 2, 2]) # adjust the column ratio for your needs.
+    #col1, col2, col3 = st.sidebar.columns([2, 2, 2]) # adjust the column ratio for your needs.
 
-    with col2:
+    #with col2:
         #st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", use_container_width=True)
 
     #st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
@@ -142,9 +142,9 @@ def show_landing_page():
 
     section = st.session_state.get("section", "Member Profile")
 
-    image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
+    #image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
 
-    col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
+    #col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
 
     #with col2:
         #st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
