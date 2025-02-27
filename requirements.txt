@@ -1,2 +1,5 @@
 google-generativeai
 pypdf
+databricks-sql-connector
+pandas
+
