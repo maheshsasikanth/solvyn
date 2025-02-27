@@ -2,6 +2,9 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import datetime
+import google.generativeai as genai
+import io
+import os
 
 def main():
     if st.session_state.get("logged_in"):
@@ -31,7 +34,7 @@ def show_login_page():
     col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
 
     with col2:
-        st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=300)
+       # st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=300)
     #st.markdown('<div class="center"><img src="solvyn.png" width="300"></div>', unsafe_allow_html=True)
     #st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
     #st.logo("/Users/maheshsasikanth/Downloads/solvyn.png", size = "large")
@@ -108,7 +111,7 @@ def show_landing_page():
     col1, col2, col3 = st.sidebar.columns([2, 2, 2]) # adjust the column ratio for your needs.
 
     with col2:
-        st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", use_container_width=True)
+        #st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", use_container_width=True)
 
     #st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
     st.sidebar.markdown(
@@ -360,34 +363,56 @@ def show_landing_page():
 
     elif section == "Reports":
         st.header("Reports")
-        st.write("Here you can view and upload your health reports.")
+        
 
-        uploaded_report = st.file_uploader("Upload Report", type=["pdf", "png", "jpg", "jpeg"])
+        gemini_api_key = st.text_input("Enter your Gemini API Key", type="password")
 
-        if uploaded_report is not None:
-            if "uploaded_reports" not in st.session_state:
-                st.session_state.uploaded_reports = []
-                st.session_state.uploaded_reports.append(uploaded_report)
-                st.write(f"Report '{uploaded_report.name}' uploaded successfully.")
-                st.rerun()
+        # File Upload
+        uploaded_file = st.file_uploader("Upload a document (PDF, TXT)", type=["pdf", "txt"])
 
-        st.markdown("### Uploaded Reports")
-        if "uploaded_reports" in st.session_state and st.session_state.uploaded_reports:
-            reports = st.session_state.uploaded_reports
-            rows = (len(reports) + 2) // 3  # Calculate number of rows needed
-            for i in range(rows):
-                cols = st.columns(3)
-                for j in range(3):
-                    index = i * 3 + j
-                    if index < len(reports):
-                        with cols[j]:
-                            report = reports[index]
-                            if report.lower().endswith((".png", ".jpg", ".jpeg")):
-                                st.image(report, use_column_width=True)
-                            else:
-                                st.write(report)
-                    else:
-                        st.write("No reports uploaded yet.")
+        if uploaded_file and gemini_api_key:
+            genai.configure(api_key=gemini_api_key)
+            model = genai.GenerativeModel('gemini-2.0-flash-lite')
+
+            if uploaded_file.type == "application/pdf":
+                try:
+                    import pypdf
+
+                    pdf_reader = pypdf.PdfReader(io.BytesIO(uploaded_file.getvalue()))
+                    text = ""
+                    for page in pdf_reader.pages:
+                        text += page.extract_text() or "" #Handle cases where page.extract_text() returns None.
+
+                except ImportError:
+                    st.error("Please install pypdf: pip install pypdf")
+                    st.stop()
+                except Exception as e:
+                    st.error(f"Error processing PDF: {e}")
+                    st.stop()
+
+            elif uploaded_file.type == "text/plain":
+                text = uploaded_file.getvalue().decode("utf-8")
+
+            else:
+                st.error("Unsupported file type. Please upload a PDF or TXT file.")
+                st.stop()
+
+            if text:
+                prompt = f"Summarize the following document:\n\n{text}\n\nSummary:"
+                try:
+                    response = model.generate_content(prompt)
+                    st.subheader("Summary:")
+                    st.write(response.text)
+                except Exception as e:
+                    st.error(f"Error generating summary: {e}")
+
+        else:
+            if not gemini_api_key and uploaded_file:
+                st.warning("Please enter your Gemini API key.")
+            if gemini_api_key and not uploaded_file:
+                st.warning("Please upload a document.")
+            if not gemini_api_key and not uploaded_file:
+                st.info("Upload a document and enter your Gemini API key to get a summary.")
 
     elif section == "Consultations":
         st.header("Consultations")
