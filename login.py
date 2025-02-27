@@ -36,8 +36,8 @@ def show_login_page():
     with col2:
         st.image("images/solvyns.png", width=300)
     #st.markdown('<div class="center"><img src="solvyn.png" width="300"></div>', unsafe_allow_html=True)
-    #st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
-    #st.logo("/Users/maheshsasikanth/Downloads/solvyn.png", size = "large")
+
+
     st.title("Health Compass Login")
 
     username = st.text_input("Username")
@@ -113,7 +113,7 @@ def show_landing_page():
     with col2:
         st.sidebar.image("images/solvyns.png", use_container_width=True)
 
-    #st.sidebar.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
+
     st.sidebar.markdown(
         """
         <style>
@@ -142,12 +142,7 @@ def show_landing_page():
 
     section = st.session_state.get("section", "Member Profile")
 
-    #image = Image.fromarray(np.random.randint(0, 255, (200, 300, 3), dtype=np.uint8))
 
-    #col1, col2, col3 = st.columns([1, 2, 1]) # adjust the column ratio for your needs.
-
-    #with col2:
-        #st.image("/Users/maheshsasikanth/Downloads/solvyns.png", width=200)
 
     st.markdown(
         """
