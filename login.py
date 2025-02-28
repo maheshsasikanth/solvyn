@@ -416,7 +416,7 @@ def show_landing_page():
         st.write("Here you can view your consultation history.")
 
 
-# Databricks Connection Details (Use Streamlit Secrets)
+        # Databricks Connection Details (Use Streamlit Secrets)
         DATABRICKS_HOST = st.secrets["DATABRICKS_HOST"]
         DATABRICKS_HTTP_PATH = st.secrets["DATABRICKS_HTTP_PATH"]
         DATABRICKS_TOKEN = st.secrets["DATABRICKS_TOKEN"]
