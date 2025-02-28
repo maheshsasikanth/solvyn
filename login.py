@@ -5,6 +5,8 @@ import datetime
 import google.generativeai as genai
 import io
 import os
+from databricks import sql as connect
+import pandas as pd
 
 def main():
     if st.session_state.get("logged_in"):
@@ -412,6 +414,37 @@ def show_landing_page():
     elif section == "Consultations":
         st.header("Consultations")
         st.write("Here you can view your consultation history.")
+
+
+# Databricks Connection Details (Use Streamlit Secrets)
+        DATABRICKS_HOST = st.secrets["DATABRICKS_HOST"]
+        DATABRICKS_HTTP_PATH = st.secrets["DATABRICKS_HTTP_PATH"]
+        DATABRICKS_TOKEN = st.secrets["DATABRICKS_TOKEN"]
+
+        def query_delta_table(sql_query):
+            try:
+                with connect.connect(server_hostname=DATABRICKS_HOST,
+                                    http_path=DATABRICKS_HTTP_PATH,
+                                    token=DATABRICKS_TOKEN) as connection:
+                    with connection.cursor() as cursor:
+                        cursor.execute(sql_query)
+                        result = cursor.fetchall()
+                        columns = [desc[0] for desc in cursor.description]
+                        df = pd.DataFrame(result, columns=columns)
+                        return df
+            except Exception as e:
+                st.error(f"Error querying Databricks: {e}")
+                return None
+
+        # Streamlit UI
+        st.title("Databricks Delta Table Viewer")
+
+        sql_query = st.text_area("Enter SQL Query", "SELECT * FROM hardlearn.stage.payers LIMIT 10")
+
+        if st.button("Execute Query"):
+            df = query_delta_table(sql_query)
+            if df is not None:
+                st.dataframe(df)
 
     elif section == "Prescriptions":
         st.header("Prescriptions")
